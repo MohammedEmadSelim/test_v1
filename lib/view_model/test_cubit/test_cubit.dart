@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
+import 'package:untitled/models/bmi_model.dart';
 
 part 'test_state.dart';
 
@@ -9,6 +10,7 @@ class TestCubit extends Cubit<TestState> {
 
   /// call bmi api
   Future<void> calBMI() async {
+    print("1234");
     emit(TestLoading());
 
     /// call by dio
@@ -18,14 +20,16 @@ class TestCubit extends Cubit<TestState> {
         "https://api.apiverve.com/v1/bmicalculator",
         queryParameters: {"weight": 70, "height": 120, "unit": "metric"},
         options: Options(
-          headers: {"x-api-key": "ead8cc5e-8320-4ed6-a47a-78b6cb86f82d"},
+          headers: {"x-api-key": "ff870e7d-5d78-4309-82bc-0b5e0347db0f"},
         ),
       );
-      // StudentModel().fromJson(j);
-
-      emit(TestSuccess());
+      var data = BmiResponse.fromJson(res.data);
+      print('Success');
+      emit(TestSuccess(data));
     } catch (e) {
       emit(TestFailure(e.toString()));
+      throw e;
+
     }
 
     /// arrange my states
@@ -34,27 +38,3 @@ class TestCubit extends Cubit<TestState> {
   }
 }
 
-Map<String, dynamic> j = {
-  "name": "salma",
-  "age": "21",
-  "work": {"place": "shbien", "salary": 20000.0},
-};
-
-class StudentModel {
-  final String name;
-  final String age;
-
-  StudentModel({required this.name, required this.age});
-
-  StudentModel fromJson(Map<String, dynamic> j) {
-    return StudentModel(age: j["name"], name: j["age"]);
-  }
-}
-
-class WorkModel {
-  final String place;
-  final double salary;
-  factory WorkModel.fromJson(Map<String, dynamic> o) => WorkModel();
-
-  WorkModel({required this.place, required this.salary});
-}

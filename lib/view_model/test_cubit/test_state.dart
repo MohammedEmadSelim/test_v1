@@ -4,13 +4,18 @@ part of 'test_cubit.dart';
 sealed class TestState {}
 
 final class TestInitial extends TestState {}
+
 final class TestLoading extends TestState {}
+
 final class TestFailure extends TestState {
   /// how customize your state
-  final String  message ;
+  final String message;
 
   TestFailure(this.message);
 }
-final class TestSuccess extends TestState {
 
+final class TestSuccess extends TestState {
+  BmiResponse data;
+
+  TestSuccess(this.data);
 }
